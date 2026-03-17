@@ -1,0 +1,26 @@
+# Environment
+.env
+
+# Claude Code worktrees
+.claude/worktrees/
+.claude/settings.local.json
+
+# Snapshots
+tmp/
+
+# OpenFang state
+.openfang/
+data/
+sessions/
+*.db
+*.db-wal
+*.db-shm
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~

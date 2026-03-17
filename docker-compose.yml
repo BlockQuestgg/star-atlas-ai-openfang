@@ -1,0 +1,31 @@
+# docker-compose.yml — star-atlas-ai-openfang
+
+services:
+  openfang:
+    build: .
+    container_name: star-atlas-ai-openfang
+    ports:
+      - "4200:4200"
+    env_file:
+      - .env
+    volumes:
+      # Config template — entrypoint.sh copies to ~/.openfang/ at startup
+      - ./config.toml:/home/openfang/project/.config-template/config.toml:ro
+      # Custom Hands — installed by entrypoint.sh on each boot
+      - ./hands:/home/openfang/project/hands:ro
+      # Custom agent templates — spawnable on-demand
+      - ./agents/custom:/home/openfang/project/agents/custom:ro
+      # Entrypoint script
+      - ./scripts/entrypoint.sh:/home/openfang/project/entrypoint.sh:ro
+      # Community vault — read-only reference for Hands
+      - ${COMMUNITY_VAULT_PATH:-./vaults/community}:/home/openfang/project/vaults/community:ro
+      # Knowledge vault — agent-curated (read-write)
+      - ./vaults/knowledge:/home/openfang/project/vaults/knowledge
+      # AI Kanban — agent workflow tracking (read-write)
+      - ./vaults/kanban-ai:/home/openfang/project/vaults/kanban-ai
+      # Persist OpenFang state (~/.openfang) across restarts
+      - openfang-data:/home/openfang/.openfang
+    restart: unless-stopped
+
+volumes:
+  openfang-data:

@@ -1,0 +1,51 @@
+# OpenFang Configuration — star-atlas-ai-openfang
+#
+# Schema reference: `openfang init --quick` generates the canonical format.
+# Key discovery: `openfang config get <dotted.key>`
+
+# Bind to 0.0.0.0 for Docker port forwarding
+api_listen = "0.0.0.0:4200"
+
+# --- LLM Provider ---
+
+# Anthropic (default — most accessible for open-source contributors)
+[default_model]
+provider    = "anthropic"
+model       = "claude-sonnet-4-6"
+api_key_env = "ANTHROPIC_API_KEY"
+
+# --- Memory ---
+[memory]
+decay_rate = 0.05
+
+# --- Channel Adapters ---
+
+# Discord — requires DISCORD_BOT_TOKEN in .env
+# Setup: https://discord.com/developers/applications
+#   1. Create application → add bot
+#   2. Enable "Message Content Intent" under Privileged Gateway Intents
+#   3. OAuth2 scopes: bot | Permissions: Send Messages, Read Message History
+#   4. Invite bot to your server, set token in .env
+# [channels.discord]
+# bot_token_env  = "DISCORD_BOT_TOKEN"
+# default_agent  = "sa-game"
+# group_policy   = "MentionOnly"
+
+# CLI adapter for local testing
+[channels.cli]
+enabled = true
+
+# --- MCP Servers ---
+
+# Filesystem server — gives hands access to vault directories outside workspace
+# Tools: mcp_filesystem_read_file, mcp_filesystem_write_file,
+#         mcp_filesystem_list_directory, mcp_filesystem_create_directory
+[[mcp_servers]]
+name = "filesystem"
+timeout_secs = 10
+env = []
+
+[mcp_servers.transport]
+type = "stdio"
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "/home/openfang/project/vaults/community", "/home/openfang/project/vaults/knowledge", "/home/openfang/project/vaults/kanban-ai"]

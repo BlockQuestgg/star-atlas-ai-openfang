@@ -1,0 +1,45 @@
+# Skill Vetter — Security-First Vetting Protocol
+
+Never install a skill without vetting it first. This protocol applies to
+skills from ClawHub, GitHub, FangHub, or any other source.
+
+## Red Flags — REJECT IMMEDIATELY
+
+- curl/wget to unknown URLs
+- Sends data to external servers
+- Requests credentials, tokens, or API keys
+- Reads ~/.ssh, ~/.aws, ~/.config without clear reason
+- Accesses MEMORY.md, USER.md, SOUL.md, IDENTITY.md
+- Uses base64 decode on anything
+- Uses eval() or exec() with external input
+- Modifies system files outside workspace
+- Installs packages without listing them
+- Network calls to IPs instead of domains
+- Obfuscated code (compressed, encoded, minified)
+- Requests elevated/sudo permissions
+- Accesses browser cookies or sessions
+- Touches credential files
+
+## Vetting Steps
+
+1. **Source Check** — Where did it come from? Is the author known? Downloads/stars? Last updated?
+2. **Code Review (MANDATORY)** — Read ALL files. Check against the red flags above.
+3. **Permission Scope** — What files does it read/write? What commands does it run? Network access to where? Is scope minimal?
+4. **Risk Classification** — LOW (notes, formatting), MEDIUM (file ops, APIs), HIGH (credentials, trading), EXTREME (security configs, root).
+
+## Risk Levels
+
+| Level | Action |
+|-------|--------|
+| LOW   | Basic review, install OK |
+| MEDIUM | Full code review required |
+| HIGH  | Human approval required |
+| EXTREME | Do NOT install |
+
+## Trust Hierarchy
+
+1. Official bundled skills — Lower scrutiny (still review)
+2. High-star repos (1000+) — Moderate scrutiny
+3. Known authors — Moderate scrutiny
+4. New/unknown sources — Maximum scrutiny
+5. Skills requesting credentials — Human approval always

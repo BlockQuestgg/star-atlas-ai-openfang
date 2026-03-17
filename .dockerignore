@@ -1,0 +1,8 @@
+.env
+.git
+.DS_Store
+data/
+sessions/
+*.db
+*.db-wal
+*.db-shm
