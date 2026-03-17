@@ -11,7 +11,7 @@ Maintained by the sa-knowledge-keeper Hand.
 | `ideas/` | Brainstorm output (creative possibilities) | sa-brainstorm |
 | `pip-reviews/` | PIP analysis (governance) | sa-pip-advisor |
 | `knowledge/` | Curated facts and linked notes | sa-knowledge-keeper |
-| `sessions/` | Session digests | sa-knowledge-keeper |
+| `sessions/` | Session digests with frontmatter (`title`, `date`, `tags`, `summary_period`, `sources`) | sa-knowledge-keeper |
 | `index/` | Topic indexes and maps | sa-knowledge-keeper |
 
 ## Topic Indexes
