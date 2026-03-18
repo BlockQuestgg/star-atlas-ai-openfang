@@ -87,6 +87,7 @@ just game
 │   ├── sa-govern/
 │   └── sa-lore-keeper/
 ├── ai/sa-kb-mcp/        # Community vault MCP server (Rust, Tantivy BM25)
+├── book/                # mdBook documentation (architecture, agents, operations)
 ├── skills/              # Shared skills loaded by Hands
 │   ├── obsidian/
 │   ├── skill-vetter/
@@ -132,6 +133,15 @@ sa-kb-mcp get-document --path "game-guides/sage-overview.md"
 ```
 
 Runs as an MCP stdio server (no args) or as a CLI tool (with subcommands). Configured in `config.toml` under `[[mcp_servers]]` with name `sakb`. See `ai/sa-kb-mcp/README.md` for details.
+
+## Documentation
+
+Full documentation lives in `book/` as an [mdBook](https://rust-lang.github.io/mdBook/) with Mermaid diagrams covering architecture, agent/hand details, data flow, and operations.
+
+```bash
+just book-serve    # Dev server with hot reload (opens browser)
+just book-build    # Build static HTML to book/book/
+```
 
 ## Configuration
 

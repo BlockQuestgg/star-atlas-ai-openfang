@@ -27,6 +27,10 @@ and knowledge curation.
 - **Kanban:**
   - `kanban/` — human-facing board (repo root, git-tracked)
   - `vaults/kanban-ai/` — agent workflow tracking (Docker-mounted, read-write)
+- **Workspaces** (`workspaces/`): IDENTITY.md, SOUL.md, HEARTBEAT.md per agent
+- **MCP Servers:**
+  - `filesystem` — direct vault file access (read/write)
+  - `sakb` (sa-kb-mcp) — Tantivy BM25 full-text search over community vault
 - **Security:** OpenFang built-in (capability RBAC, SSRF protection, taint tracking)
 - **Channels:** CLI for local testing, Discord available but commented out
 - **Dashboard:** `http://localhost:4200`
@@ -53,26 +57,50 @@ All paths under vaults/knowledge/. vaults/community/ is always read-only.
 CLI/Dashboard (localhost:4200) → OpenFang OS AgentRouter → routes to Agents
 ```
 
+## Documentation
+
+Full project documentation lives in `book/` as an mdBook with Mermaid diagrams.
+Read it first to understand the architecture, agent roles, data flow, and
+operations. Build and serve with `just book-serve`.
+
 ## Commands
 
 ```bash
+# Docker
 just build                        # Build Docker image from source
 just up                           # Start container
 just down                         # Stop container
 just rebuild                      # Rebuild and restart
 just logs                         # Tail logs
 just shell                        # Shell into container
+
+# Hands (autonomous, scheduled)
 just hand-activate-researcher     # Activate researcher Hand
 just hand-activate-brainstorm     # Activate brainstorm Hand
 just hand-activate-pip-advisor    # Activate PIP advisor Hand
 just hand-activate-knowledge-keeper # Activate knowledge keeper Hand
 just hand-list                    # List installed Hands
 just hand-status                  # Check Hand status
+
+# Agents (interactive, on-demand)
 just game                         # Spawn sa-game agent for gameplay Q&A
 just builder                      # Spawn sa-builder agent for developer Q&A
 just govern                       # Spawn sa-govern agent for governance Q&A
 just lore                         # Spawn sa-lore-keeper agent for lore Q&A
 just spawn <name>                 # Spawn any agent template
+
+# Book (mdBook documentation)
+just book-build                   # Build the documentation book
+just book-serve                   # Dev server with hot reload
+just book-clean                   # Remove build output
+
+# MCP: sa-kb-mcp (community vault search)
+just mcp-build                    # Build the MCP server
+just mcp-sections                 # List vault sections
+just mcp-search "query"           # Full-text search
+just mcp-get "path"               # Get a document
+
+# Diagnostics
 just doctor                       # Version and health check
 ```
 

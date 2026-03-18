@@ -87,6 +87,20 @@ lore:
 spawn name:
     docker compose exec openfang openfang spawn {{ name }}
 
+# --- Book (mdBook) ---
+
+# Build the documentation book
+book-build:
+    cd book && mdbook build
+
+# Serve the book locally with hot reload
+book-serve:
+    cd book && mdbook serve --open
+
+# Clean the book build output
+book-clean:
+    rm -rf book/book
+
 # --- MCP: sa-kb-mcp ---
 
 # Build the community vault MCP server

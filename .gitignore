@@ -19,6 +19,9 @@ sessions/
 # Rust build artifacts
 target/
 
+# mdBook build output
+book/book/
+
 # OS
 .DS_Store
 Thumbs.db
