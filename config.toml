@@ -7,27 +7,11 @@
 api_listen = "0.0.0.0:4200"
 
 # --- LLM Provider ---
-
-# Option A: Anthropic API key (default — most accessible for open-source contributors)
-# [default_model]
-# provider    = "anthropic"
-# model       = "claude-sonnet-4-6"
-# api_key_env = "ANTHROPIC_API_KEY"
-
-# Option B: OpenAI via VibeProxy (ChatGPT subscription, temporary testing)
-# VibeProxy runs on macOS host, proxies subscription OAuth into OpenAI-compatible API.
-# Install: https://github.com/automazeio/vibeproxy
-# [default_model]
-# provider    = "openai"
-# model       = "gpt-5.2"
-# api_key_env = "OPENAI_API_KEY"
-# base_url    = "http://host.docker.internal:8317/v1"
-
-# Option C: OpenRouter (unified gateway to 200+ models)
-[default_model]
-provider    = "openrouter"
-model       = "openrouter/google/gemini-2.5-flash"
-api_key_env = "OPENROUTER_API_KEY"
+# Set LLM_PROVIDER in .env to select: anthropic | openai | openrouter
+# Provider presets live in config/providers/*.toml
+# entrypoint.sh injects the selected provider here at startup.
+#
+# __LLM_PROVIDER__
 
 # --- Memory ---
 [memory]

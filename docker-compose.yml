@@ -9,8 +9,10 @@ services:
     env_file:
       - .env
     volumes:
-      # Config template — entrypoint.sh copies to ~/.openfang/ at startup
+      # Config template — entrypoint.sh assembles final config at startup
       - ./config.toml:/home/openfang/project/.config-template/config.toml:ro
+      # LLM provider presets — selected by LLM_PROVIDER env var
+      - ./config/providers:/home/openfang/project/.config-template/providers:ro
       # Custom Hands — installed by entrypoint.sh on each boot
       - ./hands:/home/openfang/project/hands:ro
       # Custom agent templates — spawnable on-demand

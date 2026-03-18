@@ -1,0 +1,5 @@
+# OpenRouter — unified gateway to 200+ models
+[default_model]
+provider    = "openrouter"
+model       = "openrouter/google/gemini-2.5-flash"
+api_key_env = "OPENROUTER_API_KEY"

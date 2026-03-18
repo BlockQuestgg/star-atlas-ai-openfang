@@ -1,0 +1,8 @@
+# OpenAI via VibeProxy — ChatGPT subscription, temporary testing
+# VibeProxy runs on macOS host, proxies subscription OAuth into OpenAI-compatible API.
+# Install: https://github.com/automazeio/vibeproxy
+[default_model]
+provider    = "openai"
+model       = "gpt-5.2"
+api_key_env = "OPENAI_API_KEY"
+base_url    = "http://host.docker.internal:8317/v1"

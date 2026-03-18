@@ -16,22 +16,43 @@ set -euo pipefail
 
 OPENFANG_HOME="/home/openfang/.openfang"
 CONFIG_TEMPLATE="/home/openfang/project/.config-template/config.toml"
+PROVIDERS_DIR="/home/openfang/project/.config-template/providers"
 HANDS_DIR="/home/openfang/project/hands"
 SKILLS_DIR="/home/openfang/project/skills"
 AGENTS_DIR="/home/openfang/project/agents/custom"
 WORKSPACES_DIR="/home/openfang/project/workspaces"
 
-# --- Step 1: Copy config ---
+# --- Step 1: Assemble config from template + provider ---
 mkdir -p "$OPENFANG_HOME"
 
-if [ -f "$CONFIG_TEMPLATE" ]; then
-  cp "$CONFIG_TEMPLATE" "$OPENFANG_HOME/config.toml"
-  chmod 600 "$OPENFANG_HOME/config.toml"
-  echo "Config copied from template."
-else
+if [ ! -f "$CONFIG_TEMPLATE" ]; then
   echo "ERROR: Config template not found at $CONFIG_TEMPLATE"
   exit 1
 fi
+
+# Select LLM provider (default: anthropic)
+LLM_PROVIDER="${LLM_PROVIDER:-anthropic}"
+PROVIDER_FILE="$PROVIDERS_DIR/$LLM_PROVIDER.toml"
+
+if [ ! -f "$PROVIDER_FILE" ]; then
+  echo "ERROR: Unknown LLM_PROVIDER '$LLM_PROVIDER'. Available providers:"
+  ls "$PROVIDERS_DIR"/*.toml 2>/dev/null | xargs -n1 basename | sed 's/.toml//'
+  exit 1
+fi
+
+# Assemble config: replace placeholder line with provider file contents
+# Uses awk to handle multi-line insertion cleanly
+awk -v provider_file="$PROVIDER_FILE" '
+  /^# __LLM_PROVIDER__/ {
+    while ((getline line < provider_file) > 0) {
+      if (line !~ /^#/) print line
+    }
+    next
+  }
+  { print }
+' "$CONFIG_TEMPLATE" > "$OPENFANG_HOME/config.toml"
+chmod 600 "$OPENFANG_HOME/config.toml"
+echo "Config assembled: provider=$LLM_PROVIDER"
 
 # --- Step 1b: Install workspaces ---
 # OpenFang looks for workspaces at ~/.openfang/workspaces/{name}/
