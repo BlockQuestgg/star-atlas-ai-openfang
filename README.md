@@ -73,6 +73,16 @@ just game
 │   ├── sa-brainstorm/
 │   ├── sa-pip-advisor/
 │   └── sa-knowledge-keeper/
+├── workspaces/          # Agent identity, personality, and heartbeat definitions
+│   ├── sa-researcher/
+│   ├── sa-brainstorm/
+│   ├── sa-pip-advisor/
+│   ├── sa-knowledge-keeper/
+│   ├── sa-game/
+│   ├── sa-builder/
+│   ├── sa-govern/
+│   └── sa-lore-keeper/
+├── ai/sa-kb-mcp/        # Community vault MCP server (Rust, Tantivy BM25)
 ├── skills/              # Shared skills loaded by Hands
 │   ├── obsidian/
 │   ├── skill-vetter/
@@ -100,6 +110,24 @@ just down      # Stop
 **Desktop app** — native Tauri 2.0 app with system tray and OS notifications.
 Runs its own embedded kernel (does not connect to Docker).
 See [OpenFang Desktop docs](https://www.openfang.sh/docs/desktop).
+
+## MCP Server — sa-kb-mcp
+
+A Rust MCP server that indexes `vaults/community/` with full-text search (Tantivy BM25). All agents and hands use it to search and retrieve community knowledge instead of manually browsing files.
+
+**Tools:** `mcp_sakb_list_sections`, `mcp_sakb_search`, `mcp_sakb_get_document`, `mcp_sakb_reindex`
+
+```bash
+# Build
+cd ai/sa-kb-mcp && cargo build
+
+# CLI usage
+sa-kb-mcp list-sections
+sa-kb-mcp search --query "POLIS voting" --scope governance
+sa-kb-mcp get-document --path "game-guides/sage-overview.md"
+```
+
+Runs as an MCP stdio server (no args) or as a CLI tool (with subcommands). Configured in `config.toml` under `[[mcp_servers]]` with name `sakb`. See `ai/sa-kb-mcp/README.md` for details.
 
 ## Configuration
 
@@ -131,6 +159,7 @@ Community-driven expansion opportunities:
 - **`sa-lore-tracker` Hand** — scheduled monitoring of new lore drops, story updates, faction narrative changes
 - **`sa-lore-archivist` Hand** — curate and index lore into a structured lore vault
 - **Dedicated `vaults/lore/`** — separate knowledge base for narrative/world-building content
+- **Knowledge vault MCP** — extend sa-kb-mcp to also index `vaults/knowledge/` for cross-vault search
 - **Solana RPC integration** — custom MCP server for direct on-chain data queries
 - **Star Atlas API integration** — if/when official APIs become available
 

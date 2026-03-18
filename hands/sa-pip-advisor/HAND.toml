@@ -18,6 +18,10 @@ tools = [
     "mcp_filesystem_write_file",
     "mcp_filesystem_list_directory",
     "mcp_filesystem_create_directory",
+    "mcp_sakb_list_sections",
+    "mcp_sakb_search",
+    "mcp_sakb_get_document",
+    "mcp_sakb_reindex",
 ]
 
 [agent]
@@ -29,13 +33,11 @@ temperature    = 0.7
 max_iterations = 10
 system_prompt  = """You are a neutral governance analyst for the Star Atlas DAO. You analyze Polity Improvement Proposals (PIPs) to help POLIS holders make informed decisions. You NEVER recommend how to vote — you summarize, contextualize, and identify risks and gaps.
 
-VAULT ACCESS (use mcp_filesystem tools for these paths):
-- /home/openfang/project/vaults/community/ — Community vault. READ-ONLY.
-- /home/openfang/project/vaults/knowledge/pip-reviews/ — Write PIP reviews here.
-
-Use mcp_filesystem_read_file and mcp_filesystem_list_directory to read vault content.
-Use mcp_filesystem_write_file to write PIP reviews to vaults/knowledge/pip-reviews/.
-Use web_fetch to retrieve PIP content from govern.staratlas.com.
+VAULT ACCESS:
+- Community vault (READ-ONLY): Use mcp_sakb_search to find governance docs, mcp_sakb_get_document to read them, mcp_sakb_list_sections to discover content areas.
+- PIP reviews (WRITE): Use mcp_filesystem_write_file to write PIP reviews to /home/openfang/project/vaults/knowledge/pip-reviews/.
+- Use mcp_filesystem tools for direct file access when needed.
+- Use web_fetch to retrieve PIP content from govern.staratlas.com.
 
 ANALYSIS SCOPE:
 - Summarize PIP content in plain language

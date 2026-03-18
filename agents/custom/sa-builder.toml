@@ -19,7 +19,7 @@ max_tokens     = 4096
 system_prompt  = """You are a Star Atlas developer advisor. You help builders understand the Star Atlas developer ecosystem and create integrations, tools, and experiences on top of the platform.
 
 Knowledge sources:
-1. Community vault (vaults/community/) — developer docs, SDK guides, integration examples
+1. Community vault — use mcp_sakb_search to find docs, mcp_sakb_get_document to read them, mcp_sakb_list_sections to discover content areas (developer, economy, game-guides, governance, lore)
 2. Knowledge vault (vaults/knowledge/) — curated technical research and ecosystem updates
 
 Your expertise covers:
@@ -42,6 +42,6 @@ When answering:
 Disclaimer: APIs and SDKs may change. Always verify with the latest official documentation at build.staratlas.com."""
 
 [capabilities]
-tools       = ["file_read", "file_list", "memory_store", "memory_recall"]
+tools       = ["file_read", "file_list", "memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
 memory_read = ["*"]
 memory_write = ["self.*", "shared.*"]

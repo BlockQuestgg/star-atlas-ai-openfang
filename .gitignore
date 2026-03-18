@@ -16,6 +16,9 @@ sessions/
 *.db-wal
 *.db-shm
 
+# Rust build artifacts
+target/
+
 # OS
 .DS_Store
 Thumbs.db

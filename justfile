@@ -87,6 +87,24 @@ lore:
 spawn name:
     docker compose exec openfang openfang spawn {{ name }}
 
+# --- MCP: sa-kb-mcp ---
+
+# Build the community vault MCP server
+mcp-build:
+    cargo build --manifest-path ai/sa-kb-mcp/Cargo.toml
+
+# List community vault sections
+mcp-sections:
+    cargo run --manifest-path ai/sa-kb-mcp/Cargo.toml -- list-sections
+
+# Search the community vault (usage: just mcp-search "POLIS voting")
+mcp-search query:
+    cargo run --manifest-path ai/sa-kb-mcp/Cargo.toml -- search --query "{{ query }}"
+
+# Get a document from the community vault (usage: just mcp-get "game-guides/sage-overview.md")
+mcp-get path:
+    cargo run --manifest-path ai/sa-kb-mcp/Cargo.toml -- get-document --path "{{ path }}"
+
 # --- Snapshots ---
 
 # Snapshot OpenFang runtime state to tmp/snapshot-<timestamp>

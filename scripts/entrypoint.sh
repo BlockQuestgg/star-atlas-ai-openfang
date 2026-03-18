@@ -19,6 +19,7 @@ CONFIG_TEMPLATE="/home/openfang/project/.config-template/config.toml"
 HANDS_DIR="/home/openfang/project/hands"
 SKILLS_DIR="/home/openfang/project/skills"
 AGENTS_DIR="/home/openfang/project/agents/custom"
+WORKSPACES_DIR="/home/openfang/project/workspaces"
 
 # --- Step 1: Copy config ---
 mkdir -p "$OPENFANG_HOME"
@@ -30,6 +31,20 @@ if [ -f "$CONFIG_TEMPLATE" ]; then
 else
   echo "ERROR: Config template not found at $CONFIG_TEMPLATE"
   exit 1
+fi
+
+# --- Step 1b: Install workspaces ---
+# OpenFang looks for workspaces at ~/.openfang/workspaces/{name}/
+if [ -d "$WORKSPACES_DIR" ]; then
+  mkdir -p "$OPENFANG_HOME/workspaces"
+  for ws_dir in "$WORKSPACES_DIR"/*/; do
+    [ -d "$ws_dir" ] || continue
+    ws_name=$(basename "$ws_dir")
+    ws_dest="$OPENFANG_HOME/workspaces/$ws_name"
+    mkdir -p "$ws_dest"
+    cp "$ws_dir"/*.md "$ws_dest/" 2>/dev/null || true
+    echo "Installed workspace: $ws_name"
+  done
 fi
 
 # --- Step 2: Install custom agent templates ---

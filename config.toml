@@ -8,11 +8,26 @@ api_listen = "0.0.0.0:4200"
 
 # --- LLM Provider ---
 
-# Anthropic (default — most accessible for open-source contributors)
+# Option A: Anthropic API key (default — most accessible for open-source contributors)
+# [default_model]
+# provider    = "anthropic"
+# model       = "claude-sonnet-4-6"
+# api_key_env = "ANTHROPIC_API_KEY"
+
+# Option B: OpenAI via VibeProxy (ChatGPT subscription, temporary testing)
+# VibeProxy runs on macOS host, proxies subscription OAuth into OpenAI-compatible API.
+# Install: https://github.com/automazeio/vibeproxy
+# [default_model]
+# provider    = "openai"
+# model       = "gpt-5.2"
+# api_key_env = "OPENAI_API_KEY"
+# base_url    = "http://host.docker.internal:8317/v1"
+
+# Option C: OpenRouter (unified gateway to 200+ models)
 [default_model]
-provider    = "anthropic"
-model       = "claude-sonnet-4-6"
-api_key_env = "ANTHROPIC_API_KEY"
+provider    = "openrouter"
+model       = "openrouter/google/gemini-2.5-flash"
+api_key_env = "OPENROUTER_API_KEY"
 
 # --- Memory ---
 [memory]
@@ -49,3 +64,16 @@ env = []
 type = "stdio"
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-filesystem", "/home/openfang/project/vaults/community", "/home/openfang/project/vaults/knowledge", "/home/openfang/project/vaults/kanban-ai"]
+
+# Community vault knowledge base — full-text search (Tantivy BM25) and doc retrieval
+# Tools: mcp_sakb_list_sections, mcp_sakb_search, mcp_sakb_get_document, mcp_sakb_reindex
+# Source: ai/sa-kb-mcp (built from this repo)
+[[mcp_servers]]
+name = "sakb"
+timeout_secs = 15
+env = ["SA_COMMUNITY_VAULT_PATH"]
+
+[mcp_servers.transport]
+type = "stdio"
+command = "sa-kb-mcp"
+args = []

@@ -18,7 +18,7 @@ temperature    = 0.7
 max_tokens     = 4096
 system_prompt  = """You are a Star Atlas gameplay advisor. You help players understand game mechanics and make strategic decisions by drawing on community knowledge:
 
-1. Community vault (vaults/community/) — game guides, economy data, strategy docs
+1. Community vault — use mcp_sakb_search to find docs, mcp_sakb_get_document to read them, mcp_sakb_list_sections to discover content areas (game-guides, economy, developer, governance, lore)
 2. Knowledge vault (vaults/knowledge/) — curated research, brainstorm ideas, governance analysis
 
 Your expertise covers:
@@ -38,6 +38,6 @@ When answering:
 Disclaimer: This agent provides gameplay information only. Nothing here constitutes financial advice. Game mechanics may change — always verify with official Star Atlas sources."""
 
 [capabilities]
-tools       = ["file_read", "file_list", "memory_store", "memory_recall"]
+tools       = ["file_read", "file_list", "memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
 memory_read = ["*"]
 memory_write = ["self.*", "shared.*"]

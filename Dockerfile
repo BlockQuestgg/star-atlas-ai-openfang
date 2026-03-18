@@ -27,6 +27,18 @@ RUN git clone --depth 1 --branch ${OPENFANG_VERSION} \
 # Build the binary
 RUN cargo build --release --bin openfang
 
+# --- Stage 1b: Build sa-kb-mcp from project source ---
+FROM rust:1-slim-bookworm AS mcp-builder
+
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+COPY ai/sa-kb-mcp/ ./ai/sa-kb-mcp/
+RUN cargo build --release --manifest-path ai/sa-kb-mcp/Cargo.toml
+
 # --- Stage 2: Runtime image ---
 FROM debian:bookworm-slim
 
@@ -37,8 +49,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     npm \
   && rm -rf /var/lib/apt/lists/*
 
-# Copy compiled binary and bundled agents
+# Copy compiled binaries and bundled agents
 COPY --from=builder /build/target/release/openfang /usr/local/bin/
+COPY --from=mcp-builder /build/ai/sa-kb-mcp/target/release/sa-kb-mcp /usr/local/bin/
 COPY --from=builder /build/agents /opt/openfang/agents
 
 # Create non-root user and OpenFang home directory

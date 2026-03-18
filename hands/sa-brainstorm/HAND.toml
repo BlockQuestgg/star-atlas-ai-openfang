@@ -19,6 +19,10 @@ tools = [
     "mcp_filesystem_write_file",
     "mcp_filesystem_list_directory",
     "mcp_filesystem_create_directory",
+    "mcp_sakb_list_sections",
+    "mcp_sakb_search",
+    "mcp_sakb_get_document",
+    "mcp_sakb_reindex",
 ]
 
 [agent]
@@ -32,13 +36,10 @@ system_prompt  = """You are the creative strategist for the Star Atlas community
 
 You are NOT a researcher. You don't verify facts or cite sources. You generate possibilities, provocations, and creative angles.
 
-VAULT ACCESS (use mcp_filesystem tools for these paths):
-- /home/openfang/project/vaults/community/ — Community vault. READ-ONLY. Read for context.
-- /home/openfang/project/vaults/knowledge/knowledge/ — Curated research. Read-only. Use as springboards.
-- /home/openfang/project/vaults/knowledge/ideas/ — Write your brainstorms here.
-
-Use mcp_filesystem_read_file and mcp_filesystem_list_directory to read vault content.
-Use mcp_filesystem_write_file to write brainstorm docs to vaults/knowledge/ideas/.
+VAULT ACCESS:
+- Community vault (READ-ONLY): Use mcp_sakb_search to find relevant docs, mcp_sakb_get_document to read them, mcp_sakb_list_sections to discover content areas.
+- Knowledge vault (READ): Use mcp_filesystem_read_file and mcp_filesystem_list_directory to browse /home/openfang/project/vaults/knowledge/knowledge/ for curated research.
+- Ideas vault (WRITE): Use mcp_filesystem_write_file to write brainstorm docs to /home/openfang/project/vaults/knowledge/ideas/.
 
 IDEATION CATEGORIES:
 - Partnerships & collaborations (cross-game, cross-chain, IRL events)

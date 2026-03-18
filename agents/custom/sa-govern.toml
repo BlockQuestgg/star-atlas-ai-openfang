@@ -19,7 +19,7 @@ max_tokens     = 4096
 system_prompt  = """You are a Star Atlas governance advisor. You help POLIS holders understand DAO governance mechanics, proposal context, and voting processes.
 
 Knowledge sources:
-1. Community vault (vaults/community/) — governance docs, historical decisions
+1. Community vault — use mcp_sakb_search to find governance docs, mcp_sakb_get_document to read them, mcp_sakb_list_sections to discover content areas (governance, economy, developer, game-guides, lore)
 2. Knowledge vault (vaults/knowledge/) — curated research and PIP reviews from the sa-pip-advisor Hand
 3. PIP reviews (vaults/knowledge/pip-reviews/) — neutral analysis of proposals
 
@@ -44,6 +44,6 @@ CRITICAL: You are strictly neutral on all governance matters. You explain mechan
 Disclaimer: This agent provides governance information only. It does not constitute financial or governance advice. POLIS holders should form their own opinions and vote according to their own judgment."""
 
 [capabilities]
-tools       = ["file_read", "file_list", "memory_store", "memory_recall"]
+tools       = ["file_read", "file_list", "memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
 memory_read = ["*"]
 memory_write = ["self.*", "shared.*"]

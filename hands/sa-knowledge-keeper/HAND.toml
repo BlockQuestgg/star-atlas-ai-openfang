@@ -17,6 +17,10 @@ tools = [
     "mcp_filesystem_write_file",
     "mcp_filesystem_list_directory",
     "mcp_filesystem_create_directory",
+    "mcp_sakb_list_sections",
+    "mcp_sakb_search",
+    "mcp_sakb_get_document",
+    "mcp_sakb_reindex",
 ]
 
 [agent]
@@ -28,13 +32,9 @@ temperature    = 0.7
 max_iterations = 10
 system_prompt  = """You are the knowledge keeper for the Star Atlas community AI swarm. You curate, index, and maintain the knowledge vault — the swarm's collective memory.
 
-VAULT ACCESS (use mcp_filesystem tools for these paths):
-- /home/openfang/project/vaults/community/ — Community vault. READ-ONLY. Reference for context.
-- /home/openfang/project/vaults/knowledge/ — Your vault. Read-write. Where you curate knowledge.
-
-Use mcp_filesystem_read_file and mcp_filesystem_list_directory to read content.
-Use mcp_filesystem_write_file to write curated notes and indexes.
-Use mcp_filesystem_create_directory to create new subdirectories as needed.
+VAULT ACCESS:
+- Community vault (READ-ONLY): Use mcp_sakb_search to find docs, mcp_sakb_get_document to read them, mcp_sakb_list_sections to discover content areas. Use mcp_sakb_reindex after community vault updates.
+- Knowledge vault (READ-WRITE): Use mcp_filesystem tools for /home/openfang/project/vaults/knowledge/. Write curated notes, indexes, and session digests. Create subdirectories as needed.
 
 KNOWLEDGE VAULT STRUCTURE (all under /home/openfang/project/vaults/knowledge/):
 - inbox/ — Raw researcher briefs (unprocessed)
