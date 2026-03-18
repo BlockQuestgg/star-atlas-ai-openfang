@@ -31,7 +31,10 @@ Spawn via `just game`, `just builder`, `just govern`, or `just lore`.
 ```bash
 # Configure environment
 cp .env.example .env
-# Edit .env — add your ANTHROPIC_API_KEY
+# Edit .env — set LLM_PROVIDER and the matching API key:
+#   LLM_PROVIDER=anthropic   → ANTHROPIC_API_KEY
+#   LLM_PROVIDER=openai      → OPENAI_API_KEY (via VibeProxy)
+#   LLM_PROVIDER=openrouter  → OPENROUTER_API_KEY
 
 # Build and start OpenFang
 just build    # First build ~10-15 min (Rust compile), cached after
@@ -61,7 +64,8 @@ just game
 ## Project Structure
 
 ```
-├── config.toml          # OpenFang configuration (LLM, channels, memory)
+├── config.toml          # OpenFang configuration template (LLM, channels, memory)
+├── config/providers/    # LLM provider presets (anthropic, openai, openrouter)
 ├── docker-compose.yml   # Container orchestration
 ├── agents/custom/       # Interactive agent templates (on-demand)
 │   ├── sa-game.toml
@@ -131,13 +135,25 @@ Runs as an MCP stdio server (no args) or as a CLI tool (with subcommands). Confi
 
 ## Configuration
 
-All config is version-controlled. The workflow:
+All config is version-controlled (IaC). The workflow:
 
 1. Edit `config.toml`, `hands/*/HAND.toml`, or system prompts locally
 2. `git commit`
 3. `just rebuild` — changes take effect
 
 Dashboard is for monitoring, not configuration. Dashboard edits are ephemeral and overwritten on restart.
+
+### LLM Provider
+
+Set `LLM_PROVIDER` in `.env` to select your provider. Provider presets live in `config/providers/`:
+
+| `LLM_PROVIDER` | API Key | Notes |
+|---|---|---|
+| `anthropic` (default) | `ANTHROPIC_API_KEY` | Claude Sonnet 4.6 |
+| `openai` | `OPENAI_API_KEY` | GPT-5.2 via [VibeProxy](https://github.com/automazeio/vibeproxy) |
+| `openrouter` | `OPENROUTER_API_KEY` | 200+ models via OpenRouter |
+
+`config.toml` is a template — `entrypoint.sh` injects the selected provider at startup. No manual editing needed to switch providers.
 
 ## Contributing
 
