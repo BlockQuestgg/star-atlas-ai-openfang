@@ -2,13 +2,18 @@
 
 Operational notes for running this OpenFang swarm safely.
 
+## OpenFang Documentation
+
+- [OpenFang Docs](https://www.openfang.sh/docs) — official documentation
+- [OpenFang Source Docs](https://github.com/RightNow-AI/openfang/tree/main/docs) — docs in the GitHub repo
+
 ## Agents vs Hands
 
 OpenFang has two types of runnable agents:
 
-**Hands** (`hands/`) are autonomous, scheduled agents. They run on a cron timer,
-do their task (research, brainstorm, curate), write output to the vault, and go
-idle until the next tick. They appear under **Hands** in the dashboard sidebar.
+**Hands** (`hands/`) are autonomous agents. Once activated, they run in a
+continuous background loop and tick every **60 seconds**. They appear under
+**Hands** in the dashboard sidebar.
 
 **Agents** (`agents/custom/`) are interactive, on-demand chat agents. They exist
 as templates until you spawn one. They appear under **Chat > Your Agents** in
@@ -58,8 +63,71 @@ just hand-list
 just hand-status sa-researcher
 ```
 
-Activated hands appear under **Hands** in the dashboard with their schedule
-and last-run time.
+Activated hands appear under **Hands** in the dashboard.
+
+## How Hand Ticking Works
+
+**This is critical to understand for token cost management.**
+
+When a hand is activated and has `max_iterations` set in its `[agent]`
+config, OpenFang runs it in **Continuous mode** with a hardcoded
+**60-second tick interval**. Every 60 seconds, the kernel sends:
+
+```
+[AUTONOMOUS TICK] You are running in continuous mode.
+Check your goals, review shared memory for pending tasks,
+and take any necessary actions.
+```
+
+The hand then gets up to `max_iterations` tool calls to respond. This
+means a hand will attempt to do work every 60 seconds unless its system
+prompt tells it to stop.
+
+### The `[hand.schedule]` cron field is NOT used
+
+The `[hand.schedule]` section in HAND.toml is metadata only. The kernel
+does not read it when activating a hand. The 60-second interval is
+hardcoded in `openfang-kernel/src/background.rs`. The `openfang cron`
+CLI is a separate system not connected to hand activation.
+
+Source: `crates/openfang-kernel/src/kernel.rs` lines 3303-3311.
+
+### System prompts must control NO-OP behavior
+
+Since every hand ticks every 60 seconds, **the system prompt is the only
+mechanism to control how often real work happens.** Without a NO-OP check,
+a hand will do a full work cycle every minute — burning tokens rapidly.
+
+Every hand system prompt should start with a **Phase 0: Work Check**:
+
+```
+TICK BEHAVIOR: You tick every 60 seconds. MOST TICKS SHOULD BE NO-OPS.
+1. Check memory for when you last did real work
+2. If recent enough AND no pending tasks: respond "No work. Idle." and STOP.
+3. Only proceed if enough time has passed or new work is available.
+4. After doing real work, store the current timestamp in memory.
+```
+
+This pattern means:
+- **Most ticks:** 1-2 tool calls (memory check → idle) — cheap
+- **Work ticks:** Full cycle with research/writing/curation — expensive but infrequent
+
+Our hands use these thresholds:
+- **sa-researcher:** Real work every 8 hours (checks `last_research_timestamp`)
+- **sa-brainstorm:** Real work every 12 hours (checks `last_brainstorm_timestamp`)
+- **sa-pip-advisor:** Real work every 10 hours (checks `last_pip_review_timestamp`)
+- **sa-knowledge-keeper:** Real work when new files appear (checks `last_curated_files`)
+
+### Token cost estimation
+
+With the NO-OP pattern:
+- **Idle tick:** ~200-500 tokens (memory recall + short response)
+- **Work tick:** ~5,000-20,000 tokens (tool calls, web search, file writes)
+- **Per hand per day:** ~720 idle ticks + 1-3 work ticks
+- **All 4 hands:** ~2,880 idle ticks/day (~700K-1.5M tokens) + work ticks
+
+Without the NO-OP pattern, each hand would do full work every 60 seconds —
+roughly 1,440 expensive ticks per day per hand.
 
 ## Skill Installation Security
 

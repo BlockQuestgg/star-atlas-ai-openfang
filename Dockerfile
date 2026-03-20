@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /build
 
 # Clone OpenFang source — pin to a specific tag for reproducibility
-ARG OPENFANG_VERSION=v0.3.45
+ARG OPENFANG_VERSION=v0.5.1
 RUN git clone --depth 1 --branch ${OPENFANG_VERSION} \
     https://github.com/RightNow-AI/openfang.git .
 
