@@ -38,6 +38,6 @@ When answering:
 Disclaimer: This agent provides gameplay information only. Nothing here constitutes financial advice. Game mechanics may change — always verify with official Star Atlas sources."""
 
 [capabilities]
-tools       = ["file_read", "file_list", "memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
+tools       = ["memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
 memory_read = ["*"]
 memory_write = ["self.*", "shared.*"]

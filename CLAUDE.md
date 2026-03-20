@@ -30,7 +30,7 @@ and knowledge curation.
 - **Workspaces** (`workspaces/`): IDENTITY.md, SOUL.md, HEARTBEAT.md per agent
 - **MCP Servers:**
   - `filesystem` — direct vault file access (read/write)
-  - `sakb` (sa-kb-mcp) — Tantivy BM25 full-text search over community vault
+  - `sakb` (kb-mcp) — Tantivy BM25 full-text search over community vault
 - **Security:** OpenFang built-in (capability RBAC, SSRF protection, taint tracking)
 - **Channels:** CLI for local testing, Discord available but commented out
 - **Dashboard:** `http://localhost:4200`
@@ -94,8 +94,8 @@ just book-build                   # Build the documentation book
 just book-serve                   # Dev server with hot reload
 just book-clean                   # Remove build output
 
-# MCP: sa-kb-mcp (community vault search)
-just mcp-build                    # Build the MCP server
+# MCP: kb-mcp (community vault search)
+just mcp-install                  # Install kb-mcp from GitHub
 just mcp-sections                 # List vault sections
 just mcp-search "query"           # Full-text search
 just mcp-get "path"               # Get a document

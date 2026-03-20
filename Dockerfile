@@ -27,17 +27,25 @@ RUN git clone --depth 1 --branch ${OPENFANG_VERSION} \
 # Build the binary
 RUN cargo build --release --bin openfang
 
-# --- Stage 1b: Build sa-kb-mcp from project source ---
+# --- Stage 1b: Install kb-mcp from GitHub (hybrid: BM25 + vector search) ---
 FROM rust:1-slim-bookworm AS mcp-builder
 
 RUN apt-get update && apt-get install -y \
     pkg-config \
     libssl-dev \
+    curl \
+    git \
+    g++ \
   && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /build
-COPY ai/sa-kb-mcp/ ./ai/sa-kb-mcp/
-RUN cargo build --release --manifest-path ai/sa-kb-mcp/Cargo.toml
+RUN cargo install --git https://github.com/ttdonovan/kb-mcp --features hybrid
+
+# Download ONNX embedding model for vector search
+RUN mkdir -p /opt/memvid/text-models \
+  && curl -L -o /opt/memvid/text-models/bge-small-en-v1.5.onnx \
+     https://huggingface.co/BAAI/bge-small-en-v1.5/resolve/main/onnx/model.onnx \
+  && curl -L -o /opt/memvid/text-models/bge-small-en-v1.5_tokenizer.json \
+     https://huggingface.co/BAAI/bge-small-en-v1.5/resolve/main/tokenizer.json
 
 # --- Stage 2: Runtime image ---
 FROM debian:bookworm-slim
@@ -51,13 +59,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Copy compiled binaries and bundled agents
 COPY --from=builder /build/target/release/openfang /usr/local/bin/
-COPY --from=mcp-builder /build/ai/sa-kb-mcp/target/release/sa-kb-mcp /usr/local/bin/
+COPY --from=mcp-builder /usr/local/cargo/bin/kb-mcp /usr/local/bin/
 COPY --from=builder /build/agents /opt/openfang/agents
+
+# Copy ONNX embedding model for hybrid search
+COPY --from=mcp-builder /opt/memvid/text-models /opt/memvid/text-models
 
 # Create non-root user and OpenFang home directory
 RUN useradd --create-home --shell /bin/bash openfang \
  && mkdir -p /home/openfang/.openfang \
- && chown openfang:openfang /home/openfang/.openfang
+ && mkdir -p /home/openfang/.cache/memvid \
+ && ln -s /opt/memvid/text-models /home/openfang/.cache/memvid/text-models \
+ && chown -R openfang:openfang /home/openfang/.openfang /home/openfang/.cache
 USER openfang
 WORKDIR /home/openfang/project
 

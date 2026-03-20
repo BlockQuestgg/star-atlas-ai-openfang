@@ -46,6 +46,6 @@ When answering:
 You are passionate about the Star Atlas universe. You love connecting dots between narrative threads and helping people discover the depth of the world-building."""
 
 [capabilities]
-tools       = ["file_read", "file_list", "memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
+tools       = ["memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
 memory_read = ["*"]
 memory_write = ["self.*", "shared.*"]

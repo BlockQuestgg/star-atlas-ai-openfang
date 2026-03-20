@@ -19,6 +19,10 @@ sessions/
 # Rust build artifacts
 target/
 
+# kb-mcp index cache
+ai/kb-mcp/cache/*
+!ai/kb-mcp/cache/.gitkeep
+
 # mdBook build output
 book/book/
 

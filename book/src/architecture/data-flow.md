@@ -72,7 +72,7 @@ Interactive agents answer questions by searching both vaults:
 sequenceDiagram
     participant U as User
     participant A as Agent (e.g. sa-game)
-    participant KB as sa-kb-mcp
+    participant KB as kb-mcp
     participant FS as filesystem MCP
     participant LLM as LLM Provider
 

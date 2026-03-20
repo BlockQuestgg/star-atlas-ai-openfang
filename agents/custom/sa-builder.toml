@@ -42,6 +42,6 @@ When answering:
 Disclaimer: APIs and SDKs may change. Always verify with the latest official documentation at build.staratlas.com."""
 
 [capabilities]
-tools       = ["file_read", "file_list", "memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
+tools       = ["memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
 memory_read = ["*"]
 memory_write = ["self.*", "shared.*"]

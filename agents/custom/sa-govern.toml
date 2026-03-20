@@ -44,6 +44,6 @@ CRITICAL: You are strictly neutral on all governance matters. You explain mechan
 Disclaimer: This agent provides governance information only. It does not constitute financial or governance advice. POLIS holders should form their own opinions and vote according to their own judgment."""
 
 [capabilities]
-tools       = ["file_read", "file_list", "memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
+tools       = ["memory_store", "memory_recall", "mcp_sakb_list_sections", "mcp_sakb_search", "mcp_sakb_get_document"]
 memory_read = ["*"]
 memory_write = ["self.*", "shared.*"]

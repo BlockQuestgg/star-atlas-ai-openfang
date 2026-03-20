@@ -2,9 +2,9 @@
 
 The swarm uses two MCP (Model Context Protocol) servers to access vault content. Both are configured in `config.toml` and available to all agents and hands.
 
-## sa-kb-mcp (sakb)
+## kb-mcp (sakb)
 
-A Rust MCP server built from this repo (`ai/sa-kb-mcp/`). Indexes `vaults/community/` with Tantivy BM25 full-text search.
+An external MCP server ([kb-mcp](https://github.com/ttdonovan/kb-mcp)) configured via `ai/kb-mcp/collections.ron`. Indexes `vaults/community/` with Tantivy BM25 full-text search.
 
 | Tool | Purpose |
 |---|---|
@@ -15,7 +15,7 @@ A Rust MCP server built from this repo (`ai/sa-kb-mcp/`). Indexes `vaults/commun
 
 ```mermaid
 flowchart LR
-    A[Agent / Hand] -->|mcp_sakb_search| SAKB[sa-kb-mcp]
+    A[Agent / Hand] -->|mcp_sakb_search| SAKB[kb-mcp]
     SAKB -->|Tantivy BM25| IDX[(In-RAM Index)]
     IDX -.->|built from| CV[vaults/community/]
 
@@ -27,7 +27,7 @@ flowchart LR
 
 The `filesystem` MCP server gives raw file access — list directories, read files. That works but is slow for discovery. An agent looking for "POLIS voting mechanics" would need to list directories, guess filenames, and read files hoping to find the right one.
 
-`sa-kb-mcp` indexes all documents at startup and returns ranked results with excerpts. One search call replaces multiple list + read cycles.
+`kb-mcp` indexes all documents at startup and returns ranked results with excerpts. One search call replaces multiple list + read cycles.
 
 ## filesystem
 

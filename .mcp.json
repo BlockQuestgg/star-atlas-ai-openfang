@@ -1,11 +1,8 @@
 {
   "mcpServers": {
     "sakb": {
-      "command": "cargo",
-      "args": ["run", "--manifest-path", "ai/sa-kb-mcp/Cargo.toml"],
-      "env": {
-        "SA_COMMUNITY_VAULT_PATH": "./vaults/community"
-      }
+      "command": "kb-mcp",
+      "args": ["--config", "ai/kb-mcp/collections.ron"]
     }
   }
 }

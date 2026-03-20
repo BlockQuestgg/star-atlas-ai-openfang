@@ -51,13 +51,13 @@ args = ["-y", "@modelcontextprotocol/server-filesystem", "/home/openfang/project
 
 # Community vault knowledge base — full-text search (Tantivy BM25) and doc retrieval
 # Tools: mcp_sakb_list_sections, mcp_sakb_search, mcp_sakb_get_document, mcp_sakb_reindex
-# Source: ai/sa-kb-mcp (built from this repo)
+# Source: https://github.com/ttdonovan/kb-mcp (installed via cargo install)
 [[mcp_servers]]
 name = "sakb"
 timeout_secs = 15
-env = ["SA_COMMUNITY_VAULT_PATH"]
+env = ["KB_MCP_CONFIG"]
 
 [mcp_servers.transport]
 type = "stdio"
-command = "sa-kb-mcp"
+command = "kb-mcp"
 args = []

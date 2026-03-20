@@ -21,6 +21,9 @@ services:
       - ./workspaces:/home/openfang/project/workspaces:ro
       # Entrypoint script
       - ./scripts/entrypoint.sh:/home/openfang/project/entrypoint.sh:ro
+      # kb-mcp config and writable cache for search index
+      - ./ai/kb-mcp/collections.ron:/home/openfang/project/ai/kb-mcp/collections.ron:ro
+      - ./ai/kb-mcp/cache:/home/openfang/project/ai/kb-mcp/cache
       # Community vault — read-only reference for Hands
       - ${COMMUNITY_VAULT_PATH:-./vaults/community}:/home/openfang/project/vaults/community:ro
       # Knowledge vault — agent-curated (read-write)

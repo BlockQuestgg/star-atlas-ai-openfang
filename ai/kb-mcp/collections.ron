@@ -1,0 +1,22 @@
+// kb-mcp configuration — star-atlas-ai-openfang
+//
+// Passed via: kb-mcp --config ai/kb-mcp/collections.ron
+// Or via .mcp.json args: ["--config", "ai/kb-mcp/collections.ron"]
+(
+    cache_dir: Some("ai/kb-mcp/cache"),
+    collections: [
+        (
+            name: "community",
+            path: "../../vaults/community",
+            description: "Star Atlas community knowledge vault — game guides, economy data, governance docs, developer resources, and lore",
+            writable: false,
+            sections: [
+                (prefix: "developer", description: "F-KIT, SDKs, Solana programs, building on the Star Atlas platform"),
+                (prefix: "economy", description: "ATLAS/POLIS tokens, galactic marketplace, trading, and DeFi"),
+                (prefix: "game-guides", description: "SAGE gameplay, fleet management, resources, crafting, and roadmap"),
+                (prefix: "governance", description: "DAO structure, POLIS voting, PIPs, treasury management"),
+                (prefix: "lore", description: "Factions (MUD, ONI, Ustur), Galia Expanse, narrative, and world-building"),
+            ],
+        ),
+    ],
+)

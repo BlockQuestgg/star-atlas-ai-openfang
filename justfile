@@ -101,23 +101,27 @@ book-serve:
 book-clean:
     rm -rf book/book
 
-# --- MCP: sa-kb-mcp ---
+# --- MCP: kb-mcp ---
 
-# Build the community vault MCP server
-mcp-build:
-    cargo build --manifest-path ai/sa-kb-mcp/Cargo.toml
+# Install kb-mcp from GitHub (BM25 only)
+mcp-install:
+    @cargo install --git https://github.com/ttdonovan/kb-mcp.git
+
+# Install kb-mcp with hybrid search (BM25 + vector)
+mcp-install-hybrid:
+    @cargo install --git https://github.com/ttdonovan/kb-mcp.git --features hybrid
 
 # List community vault sections
 mcp-sections:
-    cargo run --manifest-path ai/sa-kb-mcp/Cargo.toml -- list-sections
+    @kb-mcp --config ai/kb-mcp/collections.ron list-sections
 
 # Search the community vault (usage: just mcp-search "POLIS voting")
 mcp-search query:
-    cargo run --manifest-path ai/sa-kb-mcp/Cargo.toml -- search --query "{{ query }}"
+    @kb-mcp --config ai/kb-mcp/collections.ron search --query "{{ query }}"
 
 # Get a document from the community vault (usage: just mcp-get "game-guides/sage-overview.md")
 mcp-get path:
-    cargo run --manifest-path ai/sa-kb-mcp/Cargo.toml -- get-document --path "{{ path }}"
+    @kb-mcp --config ai/kb-mcp/collections.ron get-document --path "{{ path }}"
 
 # --- Snapshots ---
 

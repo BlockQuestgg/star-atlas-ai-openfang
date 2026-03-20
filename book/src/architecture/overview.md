@@ -25,7 +25,7 @@ graph TB
 
         subgraph MCP["MCP Servers"]
             FS[filesystem<br/>mcp_filesystem_*]
-            KB[sa-kb-mcp<br/>mcp_sakb_*]
+            KB[kb-mcp<br/>mcp_sakb_*]
         end
     end
 
@@ -66,4 +66,4 @@ graph TB
 - **Infrastructure as Code** — all config is version-controlled. Dashboard is for monitoring, not configuration.
 - **Read-only community vault** — agents never write to `vaults/community/`. Agent output goes to `vaults/knowledge/`.
 - **Hands disabled by default** — each tick consumes LLM tokens. Activate only what you need.
-- **Dual MCP servers** — `filesystem` for direct file access, `sakb` (sa-kb-mcp) for full-text search over the community vault.
+- **Dual MCP servers** — `filesystem` for direct file access, `sakb` (kb-mcp) for full-text search over the community vault.
